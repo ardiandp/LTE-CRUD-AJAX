@@ -12,6 +12,7 @@
 		tampilPegawai();
 		tampilPosisi();
 		tampilKota();
+		tampilUsers();
 		<?php
 			if ($this->session->flashdata('msg') != '') {
 				echo "effect_msg();";
@@ -261,6 +262,136 @@
 	$('#update-kota').on('hidden.bs.modal', function () {
 	  $('.form-msg').html('');
 	})
+
+
+
+	// USers		
+	function tampilUsers() {
+		$.get('<?php echo base_url('Users/tampil'); ?>', function(data) {
+			MyTable.fnDestroy();
+			$('#data-users').html(data);
+			refresh();
+		});
+	}
+
+	var id_users;
+	$(document).on("click", ".konfirmasiHapus-users", function() {
+		id_kota = $(this).attr("data-id");
+	})
+	$(document).on("click", ".hapus-dataUsers", function() {
+		var id = id_users;
+		
+		$.ajax({
+			method: "POST",
+			url: "<?php echo base_url('Users/delete'); ?>",
+			data: "id=" +id
+		})
+		.done(function(data) {
+			$('#konfirmasiHapus').modal('hide');
+			tampilKota();
+			$('.msg').html(data);
+			effect_msg();
+		})
+	})
+
+	$(document).on("click", ".update-dataUsers", function() {
+		var id = $(this).attr("data-id");
+		
+		$.ajax({
+			method: "POST",
+			url: "<?php echo base_url('Users/update'); ?>",
+			data: "id=" +id
+		})
+		.done(function(data) {
+			$('#tempat-modal').html(data);
+			$('#update-kota').modal('show');
+		})
+	})
+
+	$(document).on("click", ".detail-dataUSers", function() {
+		var id = $(this).attr("data-id");
+		
+		$.ajax({
+			method: "POST",
+			url: "<?php echo base_url('Users/detail'); ?>",
+			data: "id=" +id
+		})
+		.done(function(data) {
+			$('#tempat-modal').html(data);
+			$('#tabel-detail').dataTable({
+				  "paging": true,
+				  "lengthChange": false,
+				  "searching": true,
+				  "ordering": true,
+				  "info": true,
+				  "autoWidth": false
+				});
+			$('#detail-users').modal('show');
+		})
+	})
+
+	$('#form-tambah-users').submit(function(e) {
+		var data = $(this).serialize();
+
+		$.ajax({
+			method: 'POST',
+			url: '<?php echo base_url('Users/prosesTambah'); ?>',
+			data: data
+		})
+		.done(function(data) {
+			var out = jQuery.parseJSON(data);
+
+			tampilKota();
+			if (out.status == 'form') {
+				$('.form-msg').html(out.msg);
+				effect_msg_form();
+			} else {
+				document.getElementById("form-tambah-users").reset();
+				$('#tambah-users').modal('hide');
+				$('.msg').html(out.msg);
+				effect_msg();
+			}
+		})
+		
+		e.preventDefault();
+	});
+
+	$(document).on('submit', '#form-update-users', function(e){
+		var data = $(this).serialize();
+
+		$.ajax({
+			method: 'POST',
+			url: '<?php echo base_url('USers/prosesUpdate'); ?>',
+			data: data
+		})
+		.done(function(data) {
+			var out = jQuery.parseJSON(data);
+
+			tampilKota();
+			if (out.status == 'form') {
+				$('.form-msg').html(out.msg);
+				effect_msg_form();
+			} else {
+				document.getElementById("form-update-users").reset();
+				$('#update-kota').modal('hide');
+				$('.msg').html(out.msg);
+				effect_msg();
+			}
+		})
+		
+		e.preventDefault();
+	});
+
+	$('#tambah-users').on('hidden.bs.modal', function () {
+	  $('.form-msg').html('');
+	})
+
+	$('#update-users').on('hidden.bs.modal', function () {
+	  $('.form-msg').html('');
+	})
+
+
+
 
 	//Posisi
 	function tampilPosisi() {

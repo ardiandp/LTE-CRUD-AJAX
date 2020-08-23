@@ -8,8 +8,13 @@ class M_users extends CI_Model {
 	{
 		$this->db->select('*');
 		$this->db->from('admin');
-		$data= $this->db->get();
+
+		$data = $this->db->get();
+
 		return $data->result();
+
+		//$query = $this->db->get('admin');
+		//return $query->result();
 	}
 
 
