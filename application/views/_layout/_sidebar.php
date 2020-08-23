@@ -46,6 +46,12 @@
           <span>Data Kota</span>
         </a>
       </li>
+      <li <?php if ($page == 'users') {echo 'class="active"';} ?>>
+        <a href="<?php echo base_url('users'); ?>">
+          <i class="fa fa-location-arrow"></i>
+          <span>Users</span>
+        </a>
+      </li>
     </ul>
     <!-- /.sidebar-menu -->
   </section>
